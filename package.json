@@ -1,0 +1,30 @@
+{
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  },
+  "name": "project-webontwikkeling-wesleyvdk",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "scripts": {
+    "start": "nodemon app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-Wesleyvdk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-Wesleyvdk/issues"
+  },
+  "homepage": "https://github.com/AP-G-1PRO-Webontwikkeling/project-webontwikkeling-Wesleyvdk#readme",
+  "description": ""
+}
