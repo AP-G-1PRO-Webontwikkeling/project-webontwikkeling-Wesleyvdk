@@ -150,7 +150,12 @@ app.get("/characters/:id", async (req, res) => {
   //if(!req.session.user) res.redirect("/login");
   let id = parseInt(req.params.id);
   const character = await GetCharacter(id);
-  res.render("characterCard", { id: id, data: character });
+  if (req.session.user?.name == "admin") {
+    res.render("characterCard", { id: id, data: character, isAdmin: true });
+  } else {
+    res.render("characterCard", { id: id, data: character, isAdmin: false });
+  }
+  
 });
 app.get("/weapons/:id", async (req, res) => {
   //if(!req.session.user) res.redirect("/login");
