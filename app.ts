@@ -90,28 +90,19 @@ app.get("/characters", async (req, res) => {
   if (req.session.user) {
     let characters = await GetCharacters();
 
-    const query = req.query.q;
+    const query = await req.query.q;
     const sort = (req.query.sort as keyof Character) || '';
     const order = (req.query.order as 'asc' | 'desc') || '';
-  
-    const sortedCharacters = sortCharacters([...characters] as Character[], sort, order);
-  
 
     if (query && typeof query == "string") {
       characters = characters.filter((character) =>
         character.name.toLowerCase().includes(query.toLowerCase())
       );
-      if (req.session.user?.name == "admin") {
-        res.render("index", { characters: sortedCharacters, sort, order, isAdmin: true });
-      } else {
-        res.render("index", { characters: sortedCharacters, sort, order, isAdmin: false });
-      }
     }
-    if (req.session.user?.name == "admin") {
-      res.render("index", { characters: sortedCharacters, sort, order, isAdmin: true });
-    } else {
-      res.render("index", { characters: sortedCharacters, sort, order, isAdmin: false });
-    }
+    const sortedCharacters = sortCharacters([...characters] as Character[], sort, order);
+    const isAdmin = req.session.user.name === "admin";
+     res.render("index", { characters: sortedCharacters, sort, order, isAdmin });
+    
   } else {
     res.redirect("/login");
   }
@@ -122,46 +113,43 @@ app.get("/weapons", async (req, res) => {
     let weapons = await GetWeapons();
     const sort = (req.query.sort as keyof Weapon) || '';
     const order = (req.query.order as 'asc' | 'desc') || '';
-  
-    const sortedWeapons = sortWeapons([...weapons] as Weapon[], sort, order);
 
     const query = req.query.q;
     if (query && typeof query == "string") {
       weapons = weapons.filter((weapon) =>
         weapon.name.toLowerCase().includes(query.toLowerCase())
       );
-      if (req.session.user?.name == "admin") {
-        res.render("weapons", { weapons: sortedWeapons, sort, order});
-      } else {
-        res.render("weapons", { weapons: sortedWeapons, sort, order });
-      }
     }
-    if (req.session.user?.name == "admin") {
-      res.render("weapons", { weapons: sortedWeapons, sort, order});
-    } else {
-      res.render("weapons", { weapons: sortedWeapons, sort, order });
-    }
+    const sortedWeapons = sortWeapons([...weapons] as Weapon[], sort, order);
+    const isAdmin = req.session.user.name === "admin";
+     res.render("index", { weapons: sortedWeapons, sort, order, isAdmin });
+   
   } else {
     res.redirect("/login");
   }
 });
 
 app.get("/characters/:id", async (req, res) => {
-  //if(!req.session.user) res.redirect("/login");
+  if(req.session.user){
   let id = parseInt(req.params.id);
   const character = await GetCharacter(id);
-  if (req.session.user?.name == "admin") {
-    res.render("characterCard", { id: id, data: character, isAdmin: true });
-  } else {
-    res.render("characterCard", { id: id, data: character, isAdmin: false });
+  const isAdmin = req.session.user.name === "admin";
+ 
+    res.render("characterCard", { id: id, data: character, isAdmin});
+  }else{
+    res.redirect("/login");
   }
   
 });
 app.get("/weapons/:id", async (req, res) => {
-  //if(!req.session.user) res.redirect("/login");
+  if(req.session.user) {
   let id = parseInt(req.params.id);
   const weapon = await GetWeapon(id);
   res.render("weaponCard", { id: id, data: weapon });
+  }
+  else{
+    res.redirect("/login");
+  }
 });
 
 app.get("/characters/:id/edit", async (req, res) => {
