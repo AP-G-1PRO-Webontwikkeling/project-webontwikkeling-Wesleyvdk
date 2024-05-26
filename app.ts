@@ -122,7 +122,7 @@ app.get("/weapons", async (req, res) => {
     }
     const sortedWeapons = sortWeapons([...weapons] as Weapon[], sort, order);
     const isAdmin = req.session.user.name === "admin";
-     res.render("index", { weapons: sortedWeapons, sort, order, isAdmin });
+     res.render("weapons", { weapons: sortedWeapons, sort, order, isAdmin });
    
   } else {
     res.redirect("/login");
