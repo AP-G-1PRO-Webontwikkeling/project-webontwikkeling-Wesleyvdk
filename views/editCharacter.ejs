@@ -1,0 +1,201 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+<main class="container mx-32 my-12 max-w-4xl px-4 md:px-6">
+    <section class="rounded-lg border bg-white p-6 shadow-sm">
+      <article class="mb-6">
+        <h1 class="text-2xl font-bold">Edit Character</h1>
+        <p class="text-gray-500">Update your character details.</p>
+      </article>
+      <form action="/characters/<%= id %>/edit" method="post" class="space-y-6">
+        <section class="grid grid-cols-2 gap-4">
+          <article class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="name"
+            >
+              Name
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="name"
+              name="name"
+              placeholder=<%= character.name %>
+              value=<%= character.name %>
+            />
+          </article>
+          <article class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="description"
+            >
+              Description
+            </label>
+            <textarea
+              class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+              id="description"
+              name="description"
+            ><%= character.description %></textarea>
+          </article>
+        </section>
+        <section class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="weapon"
+          >
+            Weapon
+          </label><br>
+          <select
+            id="weapon"
+            name="weapon"
+            class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+          <!-- style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; overflow-wrap: normal;" -->
+          <% for(weapon of weapons){ %>
+            <option value=<%= weapon.id %>><%= weapon.name %></option>
+          <% } %>
+          </select>
+        </section>
+        <!-- <section class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="abilities"
+          >
+            Abilities
+          </label>
+          <div class="grid gap-2">
+            <div class="flex items-center gap-2">
+              <input
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="new-ability"
+                name="new-ability"
+                placeholder="Enter ability"
+              />
+              <button
+                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+                type="button"
+                onclick="addAbility()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
+            </div>
+            <div id="abilities-container" class="flex items-center gap-2">
+              <% for(ability of character.abilities) 
+              { %>
+                <input
+                name="abilities[]"
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="abilities"
+                placeholder="Enter ability"
+                value=<%= ability %>
+              />
+              <button
+                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+                type="button"
+                onclick="removeAbility(index)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+              </button>
+              <% } %>
+              
+            </div>
+          </div>
+        </section> -->
+        <section class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="isActive"
+          >
+            Active
+          </label><br />
+          <input
+            type="checkbox"
+            name="isActive"
+            value=<%= character.isActive %>
+            class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+          />
+        </section>
+        <section class="flex justify-end">
+          <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+            type="submit"
+          >
+            Save Changes
+          </button>
+        </section>
+      </form>
+    </section>
+  </main>
+  <!-- <script>
+    function addAbility() {
+        const container = document.getElementById('abilities');
+        const input = document.getElementById('new-ability');
+        const ability = input.value.trim();
+        if (ability) {
+            abilitiesContainer = document.getElementById('abilities-container');
+            const newInput = document.createElement("input");
+            newInput.classList.add("flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50")
+            newInput.name = "abilities[]";
+            newInput.placeholder = "Enter ability";
+            newInput.value = ability;
+            const button = document.createElement("button");
+            button.classList.add("inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3")
+            button.type = "button";
+            button.onclick = "removeAbility(index)"
+            button.innerHTML = `<svg
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                        fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="h-4 w-4"
+                     >
+                         <path d="M3 6h18"></path>
+                         <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                         <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                     </svg>`
+
+            abilitiesContainer.appendChild(input);
+            abilitiesContainer.appendChild(button);
+            input.value = '';
+        }
+    }
+
+    function removeAbility(button) {
+        const div = button.parentElement;
+        div.remove();
+    }
+</script> -->
+<%- include("partials/footer") %>

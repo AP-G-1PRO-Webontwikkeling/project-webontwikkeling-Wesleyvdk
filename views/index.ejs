@@ -1,5 +1,106 @@
 <%- include("partials/header") %>
-<div class="flex-1 p-10">
-  <%- include("partials/searchbar") %> <%- include("partials/table") %>
-</div>
+<%- include("partials/navbar") %>
+<main class="flex-1 p-10">
+  <form method="get" class="mb-6">
+    <input
+      name="q"
+      type="search"
+      class="w-full p-2 border rounded-md"
+      placeholder="Search for characters"
+    />
+  </form>
+  <section class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-4"></th>
+          <th class="text-left p-4">
+            <% if(sort === "name" && order === 'asc'){ %>
+              <a href="?sort=name&order=desc">Name ↑</a>
+            <% } else if(sort ==="name" && order === 'desc'){ %>
+              <a href="?sort=name&order=asc">Name ↓</a>
+            <% } else { %>
+              <a href="?sort=name&order=asc">Name</a>
+            <%}%>
+          </th>
+          <th class="text-left p-4">
+            <% if(sort === "age" && order === 'asc'){ %>
+              <a href="?sort=age&order=desc">Age ↑</a>
+            <% } else if(sort ==="age" && order === 'desc'){ %>
+              <a href="?sort=age&order=asc">Age ↓</a>
+            <% } else { %>
+              <a href="?sort=age&order=asc">Age</a>
+            <%}%>
+          <th class="text-left p-4">Abilities</th>
+          <th class="text-left p-4">
+            <% if(sort === "role" && order === 'asc'){ %>
+              <a href="?sort=role&order=desc">Role ↑</a>
+            <% } else if(sort ==="role" && order === 'desc'){ %>
+              <a href="?sort=role&order=asc">Role ↓</a>
+            <% } else { %>
+              <a href="?sort=role&order=asc">Role</a>
+            <%}%>
+          <th class="text-left p-4">
+            <% if(sort === "isActive" && order === 'asc'){ %>
+              <a href="?sort=isActive&order=desc">Active ↑</a>
+            <% } else if(sort ==="isActive" && order === 'desc'){ %>
+              <a href="?sort=isActive&order=asc">Active ↓</a>
+            <% } else { %>
+              <a href="?sort=isActive&order=asc">Active</a>
+            <%}%>
+          <th class="text-left p-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% characters.forEach((character) => { %>
+        <tr class="border-t">
+          <td class="p-4 align-middle :pr-0">
+            <span
+              class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"
+            >
+              <span
+                class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+                ><img src=<%= character.profileImage %>
+                />
+              </span>
+            </span>
+          </td>
+          <td class="p-4">
+            <%= character.name %>
+            <span
+              class="inline-flex w-fit items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-slate-300"
+            >
+              <%= character.weapon.name %>
+            </span>
+          </td>
+          <td class="p-4"><%= character.age %></td>
+          <td class="p-4">
+            <ul class="list-disc pl-5">
+              <% for(ability of character.abilities) { %>
+              <li><%= ability %></li>
+              <%}%>
+            </ul>
+          </td>
+          <td class="p-4"><%= character.role %></td>
+          <td class="p-4">
+            <span
+              class="block w-4 h-4 rounded-full <%= character.isActive ? 'bg-green-500' : 'bg-red-500' %>"
+            ></span>
+          </td>
+          <td class="p-4 flex flex-col">
+            <a
+              href="/characters/<%= character.id %>"
+              class="text-blue-600 hover:underline"
+              >View</a
+            >
+            <% if (isAdmin) { %>
+              <a href="/characters/<%= character.id %>/edit" class="text-blue-600 hover:underline">Edit</a>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </section>
+</main>
 <%- include("partials/footer") %>

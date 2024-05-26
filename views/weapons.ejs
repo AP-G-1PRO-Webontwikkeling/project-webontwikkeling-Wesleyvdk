@@ -1,0 +1,88 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+<main class="flex-1 p-10">
+  <form method="get" class="mb-6">
+    <input
+      type="search"
+      name="q"
+      class="w-full p-2 border rounded-md"
+      placeholder="Search for weapons"
+    />
+  </form>
+  <section class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-4"></th>
+          <th class="text-left p-4">
+            <% if(sort === "name" && order === 'asc'){ %>
+            <a href="?sort=name&order=desc">Name ↑</a>
+          <% } else if(sort ==="name" && order === 'desc'){ %>
+            <a href="?sort=name&order=asc">Name ↓</a>
+          <% } else { %>
+            <a href="?sort=name&order=asc">Name</a>
+          <%}%>
+        </th>
+          <th class="text-left p-4">
+            <% if(sort === "type" && order === 'asc'){ %>
+            <a href="?sort=type&order=desc">Type ↑</a>
+          <% } else if(sort ==="type" && order === 'desc'){ %>
+            <a href="?sort=type&order=asc">Type ↓</a>
+          <% } else { %>
+            <a href="?sort=type&order=asc">Type</a>
+          <%}%></th>
+          <th class="text-left p-4">
+            <% if(sort === "element" && order === 'asc'){ %>
+            <a href="?sort=element&order=desc">Element ↑</a>
+          <% } else if(sort ==="element" && order === 'desc'){ %>
+            <a href="?sort=element&order=asc">Element ↓</a>
+          <% } else { %>
+            <a href="?sort=element&order=asc">Element</a>
+          <%}%></th>
+          <th class="text-left p-4">
+            <% if(sort === "magic" && order === 'asc'){ %>
+              <a href="?sort=magic&order=desc">Magic ↑</a>
+            <% } else if(sort ==="magic" && order === 'desc'){ %>
+              <a href="?sort=magic&order=asc">Magic ↓</a>
+            <% } else { %>
+              <a href="?sort=magic&order=asc">Magic</a>
+            <%}%>
+          </th>
+          <th class="text-left p-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% weapons.forEach((weapon) => { %>
+        <tr class="border-t">
+          <td class="p-4 align-middle :pr-0">
+            <span
+              class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"
+            >
+              <span
+                class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+                ><img src=<%=weapon.image %> 
+                /></span>
+            </span>
+          </td>
+          <td class="p-4"><%= weapon.name %></td>
+          <td class="p-4"><%= weapon.type %></td>
+          <td class="p-4"><%= weapon.element %></td>
+          <td class="p-4">
+            <span
+              class="block w-4 h-4 rounded-full <%= weapon.isMagic ? 'bg-green-500' : 'bg-red-500' %>"
+            ></span>
+          </td>
+          <td class="p-4">
+            <a
+              href="/weapons/<%= weapon.id %>"
+              class="text-blue-600 hover:underline"
+              >View</a
+            >
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </section>
+</main>
+<%- include("partials/footer") %>
